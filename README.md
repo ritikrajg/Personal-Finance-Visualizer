@@ -1,48 +1,5 @@
 # Personal Finance Tracker
 
-A modern web application for tracking personal finances, built with Next.js, MongoDB, and Tailwind CSS.
-
-## Features
-
-- 💰 Track income and expenses
-- 📊 Visual data representation with charts
-- 📱 Responsive design that works on all devices
-- 🗃️ Category-based transaction organization
-- 📈 Monthly financial overview
-- 🔍 Transaction history with search and filter
-- 💾 Persistent data storage with MongoDB
-
-## Tech Stack
-
-- **Frontend:**
-  - [Next.js](https://nextjs.org/) - React framework for production
-  - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-  - [Recharts](https://recharts.org/) - Composable charting library
-
-- **Backend:**
-  - [MongoDB](https://www.mongodb.com/) - NoSQL database
-  - [Mongoose](https://mongoosejs.com/) - MongoDB object modeling
-
-- **Deployment:**
-  - [Vercel](https://vercel.com/) - Platform for frontend deployment
-  - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Cloud database service
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 
-- MongoDB Atlas account or local MongoDB installation
-- Git
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/vikasyadav01234/personal-finance-tracker.git
-cd personal-finance-tracker
-```
-
 2. Install dependencies:
 ```bash
 npm install
@@ -112,12 +69,3 @@ This project is deployed on Vercel. To deploy your own instance:
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Recharts Documentation](https://recharts.org/en-US/)
 - [MongoDB Documentation](https://docs.mongodb.com/)
-
-
-## Support
-
-If you found this project helpful, please give it a ⭐️!
-
----
-
-Created by [Vikas Yadav](https://github.com/vikasyadav01234) - 2024
