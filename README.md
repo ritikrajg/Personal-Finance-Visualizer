@@ -1,4 +1,9 @@
 # Personal Finance Tracker
+1. Clone the repository:
+```bash
+git clone https://github.com/ritikrajg/Personal-Finance-Visualizer.git
+cd personal-finance-tracker
+```
 
 2. Install dependencies:
 ```bash
