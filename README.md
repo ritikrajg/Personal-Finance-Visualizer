@@ -2,7 +2,7 @@
 
 A modern web application for tracking personal finances, built with Next.js, MongoDB, and Tailwind CSS.
 
-![Personal Finance Tracker](https://raw.githubusercontent.com/vikasyadav01234/personal-finance-tracker/main/public/screenshot.png)
+![Personal Finance Tracker](https://personal-finance-visualizer-tawny.vercel.app/)
 
 ## Features
 
@@ -41,8 +41,8 @@ A modern web application for tracking personal finances, built with Next.js, Mon
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/vikasyadav01234/personal-finance-tracker.git
-cd personal-finance-tracker
+git clone https://github.com/ritikrajg/Personal-Finance-Visualizer
+cd Personal-Finance-Visualizer
 ```
 
 2. Install dependencies:
@@ -115,26 +115,9 @@ This project is deployed on Vercel. To deploy your own instance:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
-
 ## Acknowledgments
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Recharts Documentation](https://recharts.org/en-US/)
 - [MongoDB Documentation](https://docs.mongodb.com/)
-
-## Author
-
-**Vikas Yadav**
-- GitHub: [@vikasyadav01234](https://github.com/vikasyadav01234)
-
-## Support
-
-If you found this project helpful, please give it a ⭐️!
-
----
-
-Created by [Vikas Yadav](https://github.com/vikasyadav01234) - 2024
