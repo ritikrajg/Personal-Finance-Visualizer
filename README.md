@@ -13,6 +13,7 @@ A modern web application for tracking personal finances, built with Next.js, Mon
 - 📈 Monthly financial overview
 - 🔍 Transaction history with search and filter
 - 💾 Persistent data storage with MongoDB
+- 👤 User authentication and personalized data
 
 ## Tech Stack
 
@@ -24,6 +25,7 @@ A modern web application for tracking personal finances, built with Next.js, Mon
 - **Backend:**
   - [MongoDB](https://www.mongodb.com/) - NoSQL database
   - [Mongoose](https://mongoosejs.com/) - MongoDB object modeling
+  - [NextAuth.js](https://next-auth.js.org/) - Authentication for Next.js
 
 - **Deployment:**
   - [Vercel](https://vercel.com/) - Platform for frontend deployment
@@ -50,21 +52,30 @@ cd Personal-Finance-Visualizer
 npm install
 ```
 
-3. Create a `.env` file in the root directory:
+3. Create a `.env.local` file in the root directory:
 ```env
 MONGODB_URI=your_mongodb_connection_string
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
 ```
 
-4. Run the development server:
+4. Run the setup script to create a default user and migrate existing data:
+```bash
+npm run setup
+```
+
+5. Run the development server:
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Environment Variables
 
 - `MONGODB_URI`: Your MongoDB connection string
+- `NEXTAUTH_SECRET`: Secret key for NextAuth.js
+- `NEXTAUTH_URL`: URL of your application (for authentication)
 
 ## Project Structure
 
@@ -75,28 +86,66 @@ personal-finance-tracker/
 │   ├── TransactionForm.js # Form for adding/editing transactions
 │   └── TransactionList.js # List of transactions
 ├── lib/
-│   └── mongodb.js       # MongoDB connection utility
+│   ├── mongodb.js       # MongoDB connection utility
+│   └── utils.js         # Utility functions
 ├── models/
-│   └── Transaction.js   # Mongoose model for transactions
+│   ├── Transaction.js   # Mongoose model for transactions
+│   ├── Budget.js        # Mongoose model for budgets
+│   └── User.js          # Mongoose model for users
 ├── pages/
 │   ├── api/            # API routes
-│   │   └── transactions/
+│   │   ├── auth/       # Authentication routes
+│   │   ├── transactions/
+│   │   │   ├── index.js
+│   │   │   └── [id].js
+│   │   └── budgets/
 │   │       ├── index.js
 │   │       └── [id].js
+│   ├── auth/           # Authentication pages
 │   ├── _app.js
 │   └── index.js        # Main page
 ├── public/             # Static files
+├── scripts/            # Setup and migration scripts
+│   ├── setup.js
+│   ├── create-default-user.js
+│   ├── migrate-all.js
+│   ├── migrate-transactions.js
+│   └── migrate-budgets.js
+├── utils/              # Utility functions
+│   └── calculations.js # Financial calculations
 └── styles/            # Global styles
 ```
 
+## Module System
+
+This project uses CommonJS module format for better compatibility with Node.js. All files use `require()` and `module.exports` instead of ES Modules `import` and `export` statements.
+
 ## API Routes
 
-### Transactions
+### Authentication
+- `POST /api/auth/signup` - Register a new user
+- `POST /api/auth/signin` - Sign in a user
 
-- `GET /api/transactions` - Get all transactions
+### Transactions
+- `GET /api/transactions` - Get all transactions for the current user
 - `POST /api/transactions` - Create a new transaction
 - `PUT /api/transactions/:id` - Update a transaction
 - `DELETE /api/transactions/:id` - Delete a transaction
+
+### Budgets
+- `GET /api/budgets` - Get all budgets for the current user
+- `POST /api/budgets` - Create a new budget
+- `PUT /api/budgets/:id` - Update a budget
+- `DELETE /api/budgets/:id` - Delete a budget
+
+## Scripts
+
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run setup` - Run the setup script (create default user and migrate data)
+- `npm run create-user` - Create a default user if none exists
+- `npm run migrate` - Migrate existing data to associate with the default user
 
 ## Deployment
 
@@ -121,3 +170,4 @@ This project is deployed on Vercel. To deploy your own instance:
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Recharts Documentation](https://recharts.org/en-US/)
 - [MongoDB Documentation](https://docs.mongodb.com/)
+- [NextAuth.js Documentation](https://next-auth.js.org/)

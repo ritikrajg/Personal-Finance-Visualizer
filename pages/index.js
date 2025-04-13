@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
+import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import TransactionForm from "../components/TransactionForm";
 import TransactionList from "../components/TransactionList";
 import Dashboard from "../components/Dashboard";
 import BudgetForm from "../components/BudgetForm";
 import BudgetOverview from "../components/BudgetOverview";
+import Layout from "../components/Layout";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,8 +24,17 @@ export default function Home() {
   const currentYear = new Date().getFullYear();
   const [editingBudget, setEditingBudget] = useState(null);
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+    }
+  }, [status, router]);
+
   // Combine fetch functions
   const fetchData = async () => {
+    if (status !== "authenticated") return;
+    
     try {
       setIsLoading(true);
 
@@ -49,10 +63,12 @@ export default function Home() {
     }
   };
 
-  // Single useEffect for data fetching
+  // Fetch data when session changes
   useEffect(() => {
-    fetchData();
-  }, []); // Empty dependency array since we're using current month/year
+    if (session) {
+      fetchData();
+    }
+  }, [session]);
 
   const handleSubmit = async (data) => {
     try {
@@ -175,92 +191,63 @@ export default function Home() {
     await fetchData();
   };
 
-
-  if (isLoading) {
+  // If loading or not authenticated yet, show loading state
+  if (status === "loading" || status === "unauthenticated") {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-red-600">Error: {error}</div>
-      </div>
+      <Layout>
+        <div className="flex justify-center items-center h-64">
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Personal Finance Tracker
-        </h1>
+    <Layout>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left column */}
+        <div className="lg:col-span-2 space-y-6">
+          <Dashboard transactions={transactions} />
+          <BudgetOverview
+            budgets={budgets}
+            transactions={transactions}
+            onEditBudget={setEditingBudget}
+          />
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Forms */}
-          <div className="space-y-8">
-            {/* Transaction Form */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">
-                {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
-              </h2>
-              <TransactionForm
-                onSubmit={handleSubmit}
-                initialData={editingTransaction}
-              />
-            </div>
+        {/* Right column */}
+        <div className="space-y-6">
+          {editingTransaction ? (
+            <TransactionForm
+              initialData={editingTransaction}
+              onSubmit={handleSubmit}
+              onCancel={() => setEditingTransaction(null)}
+            />
+          ) : (
+            <TransactionForm onSubmit={handleSubmit} />
+          )}
 
-            {/* Budget Form */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">
-                {editingBudget ? 'Edit Budget' : 'Set Budget'}
-              </h2>
-              <BudgetForm 
-                onSubmit={editingBudget ? handleBudgetEdit : handleBudgetSubmit}
-                initialData={editingBudget}
-              />
-            </div>
-          </div>
+          {editingBudget ? (
+            <BudgetForm
+              initialData={editingBudget}
+              onSubmit={handleBudgetEdit}
+              onCancel={() => setEditingBudget(null)}
+            />
+          ) : (
+            <BudgetForm
+              onSubmit={handleBudgetSubmit}
+              currentMonth={currentMonth}
+              currentYear={currentYear}
+            />
+          )}
 
-          {/* Right Column */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Dashboard */}
-            <div className="bg-white rounded-lg shadow">
-              <Dashboard transactions={transactions} />
-            </div>
-
-            {/* Budget Overview */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">Budget Overview</h2>
-              <BudgetOverview 
-                budgets={budgets} 
-                transactions={transactions.filter(t => {
-                  const date = new Date(t.date);
-                  return (
-                    date.toLocaleString('default', { month: 'long' }).toLowerCase() === currentMonth &&
-                    date.getFullYear() === currentYear
-                  );
-                })}
-                onEdit={setEditingBudget}
-                onDelete={handleBudgetDelete}
-              />
-            </div>
-
-            {/* Transactions List */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
-              <TransactionList
-                transactions={transactions}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            </div>
-          </div>
+          <TransactionList
+            transactions={transactions}
+            onEdit={setEditingTransaction}
+            onDelete={handleDelete}
+          />
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

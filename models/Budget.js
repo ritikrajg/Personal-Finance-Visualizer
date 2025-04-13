@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const BudgetSchema = new mongoose.Schema({
   category: {
@@ -21,6 +21,11 @@ const BudgetSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false
+  }
 });
 
-export default mongoose.models.Budget || mongoose.model('Budget', BudgetSchema);
+module.exports = mongoose.models.Budget || mongoose.model('Budget', BudgetSchema);

@@ -1,4 +1,4 @@
-export function calculateSummary(transactions) {
+function calculateSummary(transactions) {
     return transactions.reduce((acc, transaction) => {
         const amount = Number(transaction.amount);
         if (transaction.type === 'income') {
@@ -11,7 +11,7 @@ export function calculateSummary(transactions) {
     }, { totalIncome: 0, totalExpenses: 0, netAmount: 0 });
 }
 
-export function calculateMonthlyData(transactions) {
+function calculateMonthlyData(transactions) {
     return transactions.reduce((acc, transaction) => {
         const date = new Date(transaction.date);
         const month = date.toLocaleString('default', { month: 'short' });
@@ -31,7 +31,7 @@ export function calculateMonthlyData(transactions) {
     }, {});
 }
 
-export function calculateCategoryData(transactions) {
+function calculateCategoryData(transactions) {
     return transactions
         .filter(t => t.type === 'expense')
         .reduce((acc, transaction) => {
@@ -40,3 +40,9 @@ export function calculateCategoryData(transactions) {
             return acc;
         }, {});
 }
+
+module.exports = {
+    calculateSummary,
+    calculateMonthlyData,
+    calculateCategoryData
+};

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
     amount: {
@@ -32,9 +32,14 @@ const TransactionSchema = new mongoose.Schema({
         type: Date,
         required: [true, 'Date is required'],
         default: Date.now
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
     }
 }, {
     timestamps: true
 });
 
-export default mongoose.models.Transaction || mongoose.model('Transaction', TransactionSchema);
+module.exports = mongoose.models.Transaction || mongoose.model('Transaction', TransactionSchema);
